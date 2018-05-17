@@ -20,7 +20,7 @@ Mesh example:
 
 [logo]: https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/imgs_readme/leaf1.png "translucent epidermis with veins"
 
-Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage--see [relevant jupyter notebook](https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/ML_microCT/jupyter/LeafTraits.ipynb).
+Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage. See relevant [jupyter notebook](https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/ML_microCT/jupyter/LeafTraits.ipynb).
 
 
 ## Most recent changes:
