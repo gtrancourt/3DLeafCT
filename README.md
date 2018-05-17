@@ -5,24 +5,29 @@ X-ray microcomputed tomography (microCT) is rapidly becoming a popular technique
 
 ## Command Line Execution:
 
-Once installed, ML_microCT can be run from the command line. This version includes both a 'manual' mode with user input at multiple points throughout image segmentation process as well as a 'file I/O' method that runs the entire segmentation process without interruption.
+Once installed, ML_microCT can be run from the command line. This version includes both a Manual Mode with user input at multiple points throughout image segmentation process as well as a Read From File Mode, which allow one to execute the entire segmentation process without interruption; even multiple segmentations in desired order.
 
 #### See 'ML_microCT_instructions.md' for detailed instructions on running from command line.
 
 ## Post-processing Beta:
-Post-processing of full stack predictions is available in 'manual' mode and 'file I/O'  mode. Our pocess removes falsely predicted epidermis, false IAS and mesophyll predictions that fall outside the epidermis, false background predictions that fall inside the epidermis; still relies on hardcoded values for epidermis, background, IAS and palisade/spongy mesophyll--interactives are in the works. Improvements forthcoming, including post-processing integration with 'batch-mode'.
+Post-processing of full stack predictions is available in Manual Mode and Read From File Mode. Our pocess removes falsely predicted epidermis, false IAS and mesophyll predictions that fall outside the epidermis, false background predictions that fall inside the epidermis; still relies on hardcoded values for epidermis, background, IAS and palisade/spongy mesophyll--interactives are in the works. Improvements forthcoming.
 
-Once you have a fully post-processed stack, you can generate a smooth 3D mesh of connected 2D shapes. In .stl format. Then, it is possible to smooth surfaces and then visualize segmented classes as separate, complementary volumes in 3D space. See image below:
+Once you have a fully post-processed stack, you can generate a smooth 3D mesh of connected 2D shapes, in .stl format. Then, it is possible to smooth surfaces and visualize segmented classes as separate, complementary volumes in 3D space. See image below (captured from .stl viewer in ParaView):
 
 Mesh example:
 ![alt text][logo]
 
 [logo]: https://github.com/masonearles/3DLeafCT/blob/add_changes/imgs_readme/leaf1.png "translucent epidermis with veins"
 
-Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage--see relevant jupyter notebook, in 'ML_microCT/jupyter/' directory.
+Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage--see [relevant jupyter notebook](3DLeafCT/add_changes/ML_microCT/jupyter/LeafTraits.ipynb).
+
 
 ## Most recent changes:
 #### (most recent)
+-Removed deprecated files including 'smoot_stl.py' and 'vtk_tif_to_stl.py' in 'ML_microCT/src/' directory
+
+-Forked repository
+
 -Updates to both instructions file and pre-processing file.
 
 -Updates to post-processing algorithm for improved prediction accuracy, overall. Now includes vein corrections.
