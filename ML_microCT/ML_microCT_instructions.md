@@ -21,7 +21,7 @@ Contents of folder should be exactly:
 - 'results' folder
 - 'jupyter' folder
 - 'ML_microCT_instructions.md' file
-- 'pre_processing.md' file
+- '[pre_processing.md](https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/ML_microCT/pre_processing.md)' file
 
 #### Prepare your images and .txt file instructions
 
