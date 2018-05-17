@@ -7,7 +7,8 @@ X-ray microcomputed tomography (microCT) is rapidly becoming a popular technique
 
 Once installed, ML_microCT can be run from the command line. This version includes both a Manual Mode with user input at multiple points throughout image segmentation process as well as a Read From File Mode, which allow one to execute the entire segmentation process without interruption; even multiple segmentations in desired order.
 
-#### See 'ML_microCT_instructions.md' for detailed instructions on running from command line.
+#### See [ML_microCT_instructions.md] for detailed instructions on running from command line.
+[ML_microCT_instructions.md]: https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/ML_microCT/ML_microCT_instructions.md
 
 ## Post-processing Beta:
 Post-processing of full stack predictions is available in Manual Mode and Read From File Mode. Our pocess removes falsely predicted epidermis, false IAS and mesophyll predictions that fall outside the epidermis, false background predictions that fall inside the epidermis; still relies on hardcoded values for epidermis, background, IAS and palisade/spongy mesophyll--interactives are in the works. Improvements forthcoming.
@@ -17,9 +18,9 @@ Once you have a fully post-processed stack, you can generate a smooth 3D mesh of
 Mesh example:
 ![alt text][logo]
 
-[logo]: https://github.com/masonearles/3DLeafCT/blob/add_changes/imgs_readme/leaf1.png "translucent epidermis with veins"
+[logo]: https://github.com/mattjenkins3/3DLeafCT/blob/add_changes/imgs_readme/leaf1.png "translucent epidermis with veins"
 
-Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage--see [relevant jupyter notebook](3DLeafCT/add_changes/ML_microCT/jupyter/LeafTraits.ipynb).
+Some leaf-traits may be extracted from full stack predictions and/or post-processed full stack predictions. Trait extraction is currently in development stage--see [relevant jupyter notebook](https://github.com/mattjenkins/3DLeafCT/tree/add_changes/ML_microCT/jupyter/LeafTraits.ipynb).
 
 
 ## Most recent changes:
