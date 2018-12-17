@@ -1,3 +1,17 @@
+######################
+## THIS IS THE ORIGINAL code
+## WRITTEN BY
+## MASON EARLES
+## AND
+## MATT JENKINS
+## ~~~~~~~~~~~~~~~~~~~~~
+## IT HASN'T BEEN EDITED
+##
+## Guillaume Théroux-Rancourt
+## 2018-12-17
+######################
+
+
 # Import libraries
 import os
 import cv2
