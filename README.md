@@ -1,5 +1,21 @@
 # Random Forest and microCT: Leaf traits in 3D
 
+This project has been initiated by Mason Earles and took over by Matt Jenkins. Since I was actively using it, I tweaked it based on my needs. I made a lot of edits to the code. 
+
+[Go here for the version this project is forked from.](https://github.com/mattjenkins3/3DLeafCT)
+
+## Requirements
+- A lot of RAM: Processing a 5 Gb 8-bit multi-sliced tiff file can peak up to 60 GB of RAM and use up to 30-40 Gb of swap memory (written on disk). The programm is memory savvy and this needs to be addressed in order to tweak the program.
+
+## Procedure
+
+## Changes made to the previous version
+- Switched to a command line execution without interactive use. This allows to run multiple segmentations over night, flushing the memory everytime the programm ends.
+
+
+
+
+
 ### Random forest segmentation for 3D microCT images
 X-ray microcomputed tomography (microCT) is rapidly becoming a popular technique for measuring the 3D geometry of plant organs, such as roots, stems, leaves, flowers, and fruits. Due to the large size of these datasets (> 20 Gb per 3D image), along with the often irregular and complex geometries of many plant organs, image segmentation represents a substantial bottleneck in the scientific pipeline. Here, we are developing a Python module that utilizes machine learning to dramatically improve the efficiency of microCT image segmentation with minimal user input.
 
