@@ -74,7 +74,7 @@ def smooth_epidermis(img,epidermis,background,spongy,palisade,ias,vein):
     p_low_adjust[(p_low==img.shape[1])] = 0
     # Determine the lower edge of the vascular bundle
     c = (img==vein)
-    d = (b*c)
+    d = (b*c)document/d/1g6K3RQfDn6FyiVPb1-GqMSRhhqVuCYlt_9RdEY_O3dc/edit?ouid=116172551522405081091&usp=docs_home&ths=true
     v_low = np.argmax(d, axis=1)
     v_low_adjust = np.array(v_low, copy=True)
     v_low_adjust[(v_low==img.shape[1])] = 0
@@ -996,5 +996,3 @@ def Load_Resize_and_Save_Stack(filepath, stack_name, rescale_factor, keep_in_mem
         io.imsave(filepath + stack_name + "_" + str(rescale_factor) +"x-smaller.tif", img_as_ubyte(stack_rs))
         if keep_in_memory == True:
             return img_as_ubyte(stack_rs)
-
-

@@ -205,6 +205,10 @@ vein_volume = np.sum(largest_veins) * (px_edge * (px_edge*2)**2)
 #          img_as_ubyte(largest_veins))
 io.imshow(largest_veins[100])
 
+    leaf_mask = img_as_bool(transform.resize(raw_pred_stack[idx] != bg_value,
+                                             [binary_stack.shape[1], binary_stack.shape[2]],
+                                             anti_aliasing=False, order=0))
+
 #%%
 ###################
 ## AIRSPACE
@@ -244,7 +248,7 @@ os.rmdir(base_folder_name + sample_name + '/' + sample_name)
 #io.imshow(binary_stack)
 
 
-#binary_stack = img_as_bool(io.imread(base_folder_name + sample_name + '/' + binary_filename))
+binary_stack = img_as_bool(io.imread(base_folder_name + sample_name + '/' + binary_filename))
 #%%
 #Check and trim the binary stack if necessary
 # This is to match the dimensions between all images
