@@ -13,32 +13,31 @@ import os
 import cv2
 import numpy as np
 import skimage.io as io
-from skimage import transform, img_as_int, img_as_ubyte, img_as_float
-from skimage.external import tifffile
-from skimage.filters import median, sobel, hessian, gabor, gaussian, scharr
-from skimage.segmentation import clear_border
-from skimage.morphology import cube, ball, disk, remove_small_objects
+from skimage import transform, img_as_ubyte
+#from skimage.external import tifffile
+from skimage.filters import sobel, gaussian
+#from skimage.segmentation import clear_border
+from skimage.morphology import ball, remove_small_objects #, disk, cube, 
 from skimage.util import invert
 import scipy as sp
 import scipy.ndimage as spim
-import scipy.spatial as sptl
+#import scipy.spatial as sptl
 from tabulate import tabulate
 import pickle
-from PIL import Image
+#from PIL import Image
 from tqdm import tqdm
-from numba import jit
-import sklearn as skl
+#from numba import jit
+#import sklearn as skl
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.externals import joblib
-import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+#from sklearn.metrics import accuracy_score, confusion_matrix
+#import matplotlib.pyplot as plt
 import pandas as pd
-from scipy import misc
-from scipy.ndimage.filters import maximum_filter, median_filter, minimum_filter, percentile_filter
-from scipy.ndimage.morphology import distance_transform_edt
-import vtk
-import gc
+#from scipy import misc
+from scipy.ndimage.filters import maximum_filter, minimum_filter, percentile_filter
+#from scipy.ndimage.morphology import distance_transform_edt
+#import vtk
+#import gc
 # Suppress all warnings (not errors) by uncommenting next two lines of code
 import warnings
 warnings.filterwarnings("ignore")
@@ -74,7 +73,7 @@ def smooth_epidermis(img,epidermis,background,spongy,palisade,ias,vein):
     p_low_adjust[(p_low==img.shape[1])] = 0
     # Determine the lower edge of the vascular bundle
     c = (img==vein)
-    d = (b*c)document/d/1g6K3RQfDn6FyiVPb1-GqMSRhhqVuCYlt_9RdEY_O3dc/edit?ouid=116172551522405081091&usp=docs_home&ths=true
+    d = (b*c)
     v_low = np.argmax(d, axis=1)
     v_low_adjust = np.array(v_low, copy=True)
     v_low_adjust[(v_low==img.shape[1])] = 0
@@ -782,17 +781,17 @@ def local_thickness(im):
 
 
 
-def localthick_up_save(folder_name, keep_in_memory=False):
+def localthick_up_save(folder_name, sample_name, keep_in_memory=False):
     # run local thickness, upsample and save as a .tif stack in images folder
     print("***GENERATING LOCAL THICKNESS STACK***")
     #load thresholded binary downsampled images for local thickness
-    GridPhase_invert_ds = io.imread(folder_name+'GridPhase_invert_ds.tif')
+    GridPhase_invert_ds = io.imread(folder_name+sample_name+'GridPhase_invert_ds.tif')
     #run local thickness
     local_thick = local_thickness(GridPhase_invert_ds)
     #local_thick_upscale = transform.rescale(local_thick, 4, mode='reflect')
     print("***SAVING LOCAL THICKNESS STACK***")
     #write as a .tif file in our images folder
-    io.imsave(folder_name+'local_thick.tif', local_thick)
+    io.imsave(folder_name+sample_name+'local_thick.tif', local_thick)
     if keep_in_memory == True:
         return local_thick
     #Can be saved as ubyte as it is only integers and I doubt there will be values larger than 256
@@ -800,8 +799,8 @@ def localthick_up_save(folder_name, keep_in_memory=False):
 
 # Written by GTR
 # Let'S see if this save some memory
-def localthick_load_and_resize(folder_name, threshold_rescale_factor):
-    localthick_small = io.imread(folder_name+'local_thick.tif')
+def localthick_load_and_resize(folder_name, sample_name, threshold_rescale_factor):
+    localthick_small = io.imread(folder_name+sample_name+'local_thick.tif')
     if threshold_rescale_factor > 1:
         localthick_stack = transform.resize(localthick_small, [localthick_small.shape[0]*threshold_rescale_factor,localthick_small.shape[1],localthick_small.shape[2]], order=0)
     else:
@@ -811,7 +810,7 @@ def localthick_load_and_resize(folder_name, threshold_rescale_factor):
 
 
 # GTR: Added a saving switch so to not write it to disk if needed.
-def Threshold_GridPhase_invert_down(grid_img, phase_img, Th_grid, Th_phase,folder_name,rescale_factor):
+def Threshold_GridPhase_invert_down(grid_img, phase_img, Th_grid, Th_phase,folder_name,sample_name,rescale_factor):
     # Threshold grid and phase images and add the IAS together, invert, downsample and save as .tif stack
     print("***THRESHOLDING IMAGES***")
     tmp = np.zeros(grid_img.shape, dtype=np.bool_)
@@ -825,11 +824,11 @@ def Threshold_GridPhase_invert_down(grid_img, phase_img, Th_grid, Th_phase,folde
     #tmp_invert_ds = transform.resize(tmp_invert, (tmp_invert.shape[0]/rescale_factor,tmp_invert.shape[1]/rescale_factor,tmp_invert.shape[2]/rescale_factor))
     if rescale_factor == 1:
         print("***SAVING IMAGE STACK***")
-        io.imsave(folder_name+'/GridPhase_invert_ds.tif',img_as_ubyte(tmp_invert))
+        io.imsave(folder_name+'/'+sample_name+'GridPhase_invert_ds.tif',img_as_ubyte(tmp_invert))
     else:
         tmp_invert_ds = transform.resize(tmp_invert, [tmp_invert.shape[0]/rescale_factor, tmp_invert.shape[1], tmp_invert.shape[2]], order=0)
         print("***SAVING IMAGE STACK***")
-        io.imsave(folder_name+'/GridPhase_invert_ds.tif',img_as_ubyte(tmp_invert_ds))
+        io.imsave(folder_name+'/'+sample_name+'GridPhase_invert_ds.tif',img_as_ubyte(tmp_invert_ds))
 
 
 

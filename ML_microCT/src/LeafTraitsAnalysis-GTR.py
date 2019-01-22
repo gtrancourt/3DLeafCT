@@ -35,7 +35,7 @@ def Trim_Individual_Stack(large_stack, small_stack):
                 if (large_stack.shape[2]-2)/2 == small_stack.shape[2]:
                     large_stack = np.delete(large_stack, np.arange(large_stack.shape[2]-2, large_stack.shape[2]), axis=2)
         return large_stack
-    
+
 
 #%%
 #Pixel dimmension
@@ -71,8 +71,8 @@ if os.path.isfile(filepath + sample_name + 'RESULTS.txt'):
     print('This file has already been processed!')
     assert False
 
-    
-#%% 
+
+#%%
 # Load the ML segmented stack
 raw_pred_stack = io.imread(filepath + folder_name + raw_ML_prediction_name)
 print(np.unique(raw_pred_stack[100]))
@@ -105,7 +105,7 @@ vein_value = 128
 ## EPIDERMIS
 ###################
 
-# Label all of the epidermis regions 
+# Label all of the epidermis regions
 unique_epidermis_volumes = label(raw_pred_stack == epid_value, connectivity=1)
 props_of_unique_epidermis = regionprops(unique_epidermis_volumes)
 
@@ -130,7 +130,7 @@ print(epidermis_centroid[ordered_epidermis[-4:]])
 two_largest_epidermis = (unique_epidermis_volumes == ordered_epidermis[-1]+1) | (unique_epidermis_volumes == ordered_epidermis[-2]+1)
 
 #Check if it's correct
-#io.imsave(filepath + folder_name + 'test_epidermis.tif', 
+#io.imsave(filepath + folder_name + 'test_epidermis.tif',
 #          img_as_ubyte(two_largest_epidermis))
 io.imshow(two_largest_epidermis[100])
 #%%
@@ -190,7 +190,7 @@ ordered_veins = np.argsort(veins_area)
 
 #print(np.sum(veins_area <= 1000))
 
-# I found that for my images, a threshold of 100000 (1e5) pixel^3 remove 
+# I found that for my images, a threshold of 100000 (1e5) pixel^3 remove
 # the noise left by the segmentation method and kept only the argest veins.
 # This should be adjusted depending on the species/images/maginification.
 large_veins_ids = veins_label[veins_area > 100000]
@@ -201,7 +201,7 @@ largest_veins = np.in1d(unique_vein_volumes, large_veins_ids).reshape(raw_pred_s
 vein_volume = np.sum(largest_veins) * (px_edge * (px_edge*2)**2)
 
 #Check if it's correct
-#io.imsave(base_folder_name + sample_name + '/' + folder_name + 'test_veins.tif', 
+#io.imsave(base_folder_name + sample_name + '/' + folder_name + 'test_veins.tif',
 #          img_as_ubyte(largest_veins))
 io.imshow(largest_veins[100])
 
@@ -214,10 +214,10 @@ io.imshow(largest_veins[100])
 ## CREATE THE FULLSIZE SEGMENTED STACK ##
 #########################################
 
-# My segmenteation procedure used a reduced size stack, since my original 
+# My segmenteation procedure used a reduced size stack, since my original
 # images are too big to be handled. I do want to use my original images for
 # their quality and details, so I use the binary image and add on top of it
-# the background, epidermis, and veins that have been segmented. That way, I 
+# the background, epidermis, and veins that have been segmented. That way, I
 # keep the detail I want at the airspace-cell interface, while still having a
 # good background, epidermis, and vein segmentation to remove the tissues that
 # are not need for some traits.
@@ -260,7 +260,7 @@ binary_stack = Trim_Individual_Stack(binary_stack, raw_pred_stack)
 
 #%%
 # This cell creates an empty array filled with the backgroud color (177), then
-# adds all of the leaf to it. Looping over each slice (this is more memory 
+# adds all of the leaf to it. Looping over each slice (this is more memory
 # efficient than working on the whole stack), it takes the ML segmented image,
 # resize the slice, and adds it to the empty array.
 bg_value_new = 177
@@ -271,11 +271,11 @@ large_segmented_stack = np.full(shape=binary_stack.shape, fill_value=bg_value_ne
 for idx in np.arange(large_segmented_stack.shape[0]):
     # Creates a boolean 2D array of the veins (from the largest veins id'ed earlier)
     temp_veins = img_as_bool(transform.resize(largest_veins[idx],
-                                              [binary_stack.shape[1], binary_stack.shape[2]], 
-                                              anti_aliasing=False, order=0))    
+                                              [binary_stack.shape[1], binary_stack.shape[2]],
+                                              anti_aliasing=False, order=0))
     # Creates a 2D array with the epidermis being assinged values 30 or 60
     temp_epid = transform.resize(unique_epidermis_volumes[idx],
-                                              [binary_stack.shape[1], binary_stack.shape[2]], 
+                                              [binary_stack.shape[1], binary_stack.shape[2]],
                                               anti_aliasing=False, preserve_range=True, order=0) * 30
     # Creates a 2D mask of only the leaf to remove the backgroud from the
     # original sized binary image.
@@ -285,7 +285,7 @@ for idx in np.arange(large_segmented_stack.shape[0]):
     large_segmented_stack[idx][leaf_mask] = binary_stack[idx][leaf_mask] * ias_value_new #binary_stack is a boolean, so you need to multiply it.
     large_segmented_stack[idx][temp_veins] = vein_value_new #vein_value
     large_segmented_stack[idx][temp_epid != 0] = temp_epid[temp_epid != 0]
-    
+
 io.imshow(large_segmented_stack[100])
 print('### Validate the values in the stack ###')
 print(np.unique(large_segmented_stack[100]))
@@ -369,7 +369,7 @@ print('or '+str(float(true_ias_SA/1000000))+' mm**2')
 print('Sm: '+str(true_ias_SA/leaf_area))
 print('Ames/Vmes: '+str(true_ias_SA/(mesophyll_volume-vein_volume)))
 
- 
+
 # Write the data into a data frame
 data_out = {'LeafArea':leaf_area,
             'LeafThickness':leaf_thickness.mean(),
