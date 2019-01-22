@@ -13,14 +13,51 @@ This project has been initiated by [Mason Earles](https://github.com/masonearles
 
 
 ## Requirements
-- __A lot of RAM:__ Processing a 5 Gb 8-bit multi-sliced tiff file can peak up to 60 GB of RAM and use up to 30-40 Gb of swap memory (memory written on disk) on linux. The programm is memory savvy and this needs to be addressed in future versions in order to tweak the program. I've used the previous version of the code, i.e. not the one I reworked here, on smaller files (< 500 Mb, mostly in the 200-300 Mb) using a 16 Gb Macbook Pro. So smaller file size would be feasable without resizing and/or on a machine equipped with less RAM.
+- __RAM:__ Processing a 5 Gb 8-bit multi-sliced tiff file can peak up to 60 GB of RAM and use up to 30-40 Gb of swap memory (memory written on disk) on Linux (and takes about 3-5 hours to complete). Processing a 250 Mb 8-bit file is of course a lot faster (30-90 minutes) but still takes about 10 Gb of RAM. The programm is memory savvy and this needs to be addressed in future versions in order to tweak the program.
 - python 2
 
 
 ## Procedure
-To come...
 
-A jupyter notebook rendering of the leaf trait analysis code, with some resulting images in the notebook, is available.
+### Preparation of leaf microCT images for semi-automatic segmentation
+A more detailed exaplanation with images will come.
+
+Briefly, I draw over a few slices, the number of which should be determined for each stack based on quality of the image, venation pattern and quantity, etc. After having created a ROI set for each draw-over slice (i.e. test/training slices), I use a [custom ImageJ macro](https://github.com/gtrancourt/imagej_macros/tree/master/macros). I've created a few over time depending on which tissues I wanted to segment, all named `Batch slice labelled...`. Ask me for which would suit you best and how to edit it. This macro loops over the ROI sets in a folder and creates a labelled stack consisting of the manually segmented tissues painted over the binary image (i.e. the image combining the thresholded gridrec and phase stacks).
+
+### Leaf segmentation: `MLmicroCT-GTR-wrapper.py`
+The program is currently setup to run non-interactively from the command line. I chose this in order to run multiple segmentations overnight. Another advantage is that it clears the memory efficiently when the program ends. I do need to give a better name!
+
+Under a Unix or Linux system, the program is called like this:
+
+```
+python /path/to/this/repo/3DLeafCT/ML_microCT/src/MLmicroCT-GTR-wrapper.py filename_ PHASE GRID 'list,of,slices,in,imagej,1,2,3,4' rescale_factor threshold_rescale_factor '/path/to/your/image/directory/'
+```
+
+Real example:
+
+```
+python ~/Dropbox/_github/3DLeafCT/ML_microCT/src/MLmicroCT-GTR-wrapper.py Carundinacea2004_0447_ 82 123 '83,275,321,467,603,692' 1 1 '/run/media/gtrancourt/GTR_Touro/Grasses_uCT/'
+```
+
+`python`: This just calls python 2.
+
+`/path/to/this/repo/3DLeafCT/ML_microCT/src/MLmicroCT-GTR-wrapper.py`: This should be the complete path to where the segmentation program is. If you have cloned the repository from github, replace `/path/to/this/repo/` for the path to the repository. This is also the folder in which the functions code is located (`MLmicroCTfunctions.py`) and this file is called by `MLmicroCT-GTR-wrapper.py`.
+
+`filename_`: This the filename and the name of the folder. Right now, it is setup so that the folder and the base file name are exactly the same. By base file name, I mean the first part of your naming convention, like `Carundinacea2004_0447_` which is the name of the folder and also exactly the same as in `Carundinacea2004_0447_GRID-8bit.tif`, the gridrec file name.
+
+`PHASE` and `GRID`: These are the threshold values for the phase contract image (also called paganin reconstruction). Only one value needed.
+
+`'list,of,slices,in,imagej,1,2,3,4'`: This is the list of slices in ImageJ notation, i.e. with 1 being the first element. Needs to be between `''` and separated by commas.
+
+`rescale_factor`: This is a downsizing integer that can be used to resize the stack in order to make the computation faster or to have a file size manageable by the program. It will resize only the _x_ and _y_ axes and so keeps more resolution in the _z_ axis. These files are used during the whole segmentation process. Note that the resulting files will be anisotropic, i.e. one voxel has different dimension in _x_, _y_, and _z_.
+
+`threshold_rescale_factor`: This one resizes _z_, i.e. depth or the slice number, after having resized using the `rescale_factor`. This is used in the computation of the local thickness (computing the largest size within the cells -- used in the random forst segmentation). This is particularly slow process and benefits from a smaller file, and it matters less if there is a loss of resolution in this step. Note that this image is now isotropic, i.e. voxels have same dimensions in all axes.
+
+`'/path/to/your/image/directory/'`: Assuming all your image folder for an experiments are located in the same folder, this is the path to this folder (don't forget the `/` at the end).
+
+
+### Post-processing and leaf traits analysis
+A jupyter notebook rendering of the post-processing and leaf trait analysis code, with some resulting images in the notebook, is available. This code will most probably have to be fine-tuned to each experiment.
 
 
 ## Changes made to the previous version
