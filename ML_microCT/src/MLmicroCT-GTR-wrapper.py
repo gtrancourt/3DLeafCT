@@ -46,7 +46,7 @@ threshold_rescale_factor = int(sys.argv[6])
 base_folder_name = sys.argv[7]
 
 # Set directory of functions in order to import MLmicroCTfunctions
-path_to_script = '/'.join(full_script_path.split('/')[:-1] + '/')
+path_to_script = '/'.join(full_script_path.split('/')[:-1]) + '/'
 os.chdir(path_to_script)
 
 # Import the custom ML microCT functions
